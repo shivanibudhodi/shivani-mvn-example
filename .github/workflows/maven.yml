@@ -43,7 +43,14 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      # Use JFrog CLI for Maven install
-      - name: Install dependencies with JFrog
-        run: jfrog mvn install
+      - name: Configure Maven with JFrog
+        run: |
+          jfrog mvn config \
+            --resolver-repo demo-libs-release \
+            --snapshot-repo demo-libs-snapshot \
+            --use-default-authentication \
+            --interactive=false
 
+      # Use JFrog Maven Install
+      - name: Run JFrog Maven Install
+        run: jfrog mvn install
