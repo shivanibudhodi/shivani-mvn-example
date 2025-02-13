@@ -23,6 +23,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Install JFrog CLI
+      - name: Install JFrog CLI
+        run: |
+          curl -fL https://getcli.jfrog.io | sh
+          mv jfrog /usr/local/bin/
+
+      # Configure JFrog CLI with Artifactory
+      - name: Configure JFrog CLI
+        run: |
+          jfrog rt config --url https://incloudmaster.jfrog.io/artifactory \
+          --user ${{ secrets.ARTIFACTORY_USERNAME }} \
+          --password ${{ secrets.ARTIFACTORY_PASSWORD }} \
+          --interactive=false
+
       # Set up Java JDK (change '11' if necessary)
       - name: Set up JDK
         uses: actions/setup-java@v2
@@ -30,48 +44,10 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      # Configure Maven with Artifactory authentication
-      - name: Configure Maven settings
-        run: |
-          echo "<settings xmlns=\"http://maven.apache.org/SETTINGS/1.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd\">
-            <servers>
-              <server>
-                <id>demo-libs-release</id>
-                <username>${{ secrets.ARTIFACTORY_USERNAME }}</username>
-                <password>${{ secrets.ARTIFACTORY_PASSWORD }}</password>
-              </server>
-              <server>
-                <id>demo-libs-snapshot</id>
-                <username>${{ secrets.ARTIFACTORY_USERNAME }}</username>
-                <password>${{ secrets.ARTIFACTORY_PASSWORD }}</password>
-              </server>
-            </servers>
-            <profiles>
-              <profile>
-                <id>artifactory</id>
-                <repositories>
-                  <repository>
-                    <id>demo-libs-release</id> <!-- URL for releases -->
-                    <url>https://incloudmaster.jfrog.io/artifactory/demo-libs-release</url> <!-- Set your Artifactory URL here -->
-                    <snapshots>
-                      <enabled>false</enabled>
-                    </snapshots>
-                  </repository>
-                  <repository>
-                    <id>demo-libs-snapshot</id> <!-- URL for snapshots -->
-                    <url>https://incloudmaster.jfrog.io/artifactory/demo-libs-snapshot</url> <!-- Set your Artifactory URL here -->
-                    <snapshots>
-                      <enabled>true</enabled>
-                    </snapshots>
-                  </repository>
-                </repositories>
-              </profile>
-            </profiles>
-            <activeProfiles>
-              <activeProfile>artifactory</activeProfile>
-            </activeProfiles>
-          </settings>" > $HOME/.m2/settings.xml
+      # Use JFrog CLI for Maven install
+      - name: Install dependencies with JFrog
+        run: jf mvn install
 
-      # Build the Maven project
-      - name: Build with Maven
-        run: mvn clean install --settings $HOME/.m2/settings.xml
+      # Optionally, run other Maven goals
+      - name: Run tests with JFrog
+        run: jf mvn test
