@@ -32,7 +32,7 @@ jobs:
       # Configure JFrog CLI with Artifactory
       - name: Configure JFrog CLI
         run: |
-          jf config add --url https://incloudmaster.jfrog.io/artifactory \
+          jfrog rt config --url https://incloudmaster.jfrog.io/artifactory \
           --user ${{ secrets.ARTIFACTORY_USERNAME }} \
           --password ${{ secrets.ARTIFACTORY_PASSWORD }} \
           --interactive=false
