@@ -56,9 +56,9 @@ jobs:
       - name: Configure Maven with JFrog
         run: |
           jf mvn-config \
-            --resolver-repo demo-libs-release \
-            --snapshot-repo demo-libs-snapshot \
-            --use-default-authentication \
+            --repo-resolve-releases demo-libs-release \
+            --repo-resolve-snapshots demo-libs-snapshot \
+            --server-id-deploy test \
             --interactive=false
 
       # Use JFrog Maven Install
