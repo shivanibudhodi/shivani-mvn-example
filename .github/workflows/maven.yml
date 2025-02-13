@@ -59,10 +59,7 @@ jobs:
             --repo-resolve-releases demo-libs-release \
             --repo-resolve-snapshots demo-libs-snapshot \
             --repo-deploy-releases demo-libs-release \
-            --repo-deploy-snapshots demo-libs-snapshot \
-            --server-id-deploy test \
-            --server-id-resolve test
-            
+            --repo-deploy-snapshots demo-libs-snapshot
       # Use JFrog Maven Install
       - name: Run JFrog Maven Install
         run: jf mvn install
