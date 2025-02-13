@@ -1,4 +1,3 @@
-# This is a basic workflow to help you get started with Actions
 name: CI
 
 # Controls when the workflow will run
@@ -41,15 +40,38 @@ jobs:
                 <username>${{ secrets.ARTIFACTORY_USERNAME }}</username>
                 <password>${{ secrets.ARTIFACTORY_PASSWORD }}</password>
               </server>
-                <server>
+              <server>
                 <id>demo-libs-snapshot</id>
                 <username>${{ secrets.ARTIFACTORY_USERNAME }}</username>
                 <password>${{ secrets.ARTIFACTORY_PASSWORD }}</password>
               </server>
             </servers>
+            <profiles>
+              <profile>
+                <id>artifactory</id>
+                <repositories>
+                  <repository>
+                    <id>demo-libs-release</id> <!-- URL for releases -->
+                    <url>https://incloudmaster.jfrog.io/artifactory/demo-libs-release</url> <!-- Set your Artifactory URL here -->
+                    <snapshots>
+                      <enabled>false</enabled>
+                    </snapshots>
+                  </repository>
+                  <repository>
+                    <id>demo-libs-snapshot</id> <!-- URL for snapshots -->
+                    <url>https://incloudmaster.jfrog.io/artifactory/demo-libs-snapshot</url> <!-- Set your Artifactory URL here -->
+                    <snapshots>
+                      <enabled>true</enabled>
+                    </snapshots>
+                  </repository>
+                </repositories>
+              </profile>
+            </profiles>
+            <activeProfiles>
+              <activeProfile>artifactory</activeProfile>
+            </activeProfiles>
           </settings>" > $HOME/.m2/settings.xml
 
       # Build the Maven project
       - name: Build with Maven
         run: mvn clean install --settings $HOME/.m2/settings.xml
-
