@@ -25,7 +25,7 @@
     <repositories>
         <repository>
             <id>artifactory-repo</id>
-            <url>hhttps://incloudmaster.jfrog.io/artifactory/demo-libs-snapshot/</url>
+            <url>https://incloudmaster.jfrog.io/artifactory/demo-libs-snapshot</url>
         </repository>
     </repositories>
 
