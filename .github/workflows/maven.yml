@@ -52,10 +52,6 @@ jobs:
         run: |
           mvn --version
 
-      - name: Build with Maven
-        run: |
-          mvn clean package
-
       - name: Configure Maven with JFrog
         run: |
           jfrog mvn config \
