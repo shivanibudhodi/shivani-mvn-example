@@ -23,11 +23,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Install JFrog CLI
-      - name: Install JFrog CLI
-        run: |
-          curl -fL https://getcli.jfrog.io | sh
-          mv jfrog /usr/local/bin/
+   # This action sets up the JFrog CLI with the Artifactory URL and access token     
+  - uses: jfrog/setup-jfrog-cli@v4
+     env:
+       JF_URL: ${{ vars.JF_URL }}
+       JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }} 
           
       - name: Configure JFrog CLI
         run: |
