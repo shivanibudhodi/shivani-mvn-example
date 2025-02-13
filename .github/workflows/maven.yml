@@ -45,13 +45,16 @@ jobs:
         # Install Maven
       - name: Install Maven
         run: |
-          wget https://archive.apache.org/dist/maven/binaries/apache-maven-3.8.1-bin.zip -O maven.zip
-          unzip maven.zip
-          sudo mv apache-maven-3.8.1 /opt/maven
-          echo 'M2_HOME=/opt/maven' | sudo tee -a /etc/environment
-          echo 'PATH=$PATH:$M2_HOME/bin' | sudo tee -a /etc/environment
-          source /etc/environment
+          sudo apt-get update
+          sudo apt-get install -y maven
 
+      - name: Verify Maven installation
+        run: |
+          mvn --version
+
+      - name: Build with Maven
+        run: |
+          mvn clean package
 
       - name: Configure Maven with JFrog
         run: |
