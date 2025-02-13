@@ -31,7 +31,7 @@ jobs:
           
       - name: Configure JFrog CLI
         run: |
-          export SERVER_ID="test"
+          export SERVER_ID= "test"
           jf c add $SERVER_ID --url=$JF_URL --access-token=$JF_ACCESS_TOKEN --interactive=false
 
       # Set up Java JDK (change '11' if necessary)
