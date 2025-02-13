@@ -31,10 +31,8 @@ jobs:
           
       - name: Configure JFrog CLI
         run: |
-          jfrog rt config --url https://incloudmaster.jfrog.io/artifactory \
-          --user ${{ secrets.ARTIFACTORY_USERNAME }} \
-          --password ${{ secrets.ARTIFACTORY_PASSWORD }} \
-          --interactive=false
+          export SERVER_ID="test"
+          jf c add $SERVER_ID --url=$JF_URL --access-token=$JF_ACCESS_TOKEN --interactive=false
 
       # Set up Java JDK (change '11' if necessary)
       - name: Set up JDK
@@ -54,7 +52,7 @@ jobs:
 
       - name: Configure Maven with JFrog
         run: |
-          jfrog mvn config \
+          jf mvn config \
             --resolver-repo demo-libs-release \
             --snapshot-repo demo-libs-snapshot \
             --use-default-authentication \
@@ -62,4 +60,4 @@ jobs:
 
       # Use JFrog Maven Install
       - name: Run JFrog Maven Install
-        run: jfrog mvn install
+        run: jf mvn install
